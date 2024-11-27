@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jonathan Livingstone Seagull Quotes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+    <script src="https://unpkg.com/htmx.org@2.0.3"
+            integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+            crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div style="margin: 2em">
+      <div><h1>Seagull</h1></div>
+      <div hx-get="/quote" hx-trigger="load, every 10s"></div>
+      <div style="padding-top: 1em"><i>― Richard Bach, Jonathan Livingston Seagull</i></div>
+    </div>
+  </body>
+</html>
