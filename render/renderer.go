@@ -20,10 +20,11 @@ const (
 // Renderer implements the necessary magic to render Hotwire Turbo frames and streams.
 // Implements the `echo.Renderer` interface.
 type Renderer struct {
-	templates   NamespaceFS
-	globalPaths []string
-	rootPage    string
-	globals     map[string]any
+	templates    NamespaceFS
+	globalPaths  []string
+	rootPage     string
+	notFoundPage string
+	globals      map[string]any
 }
 
 // New setups a new template renderer. rootPage is the Hotwire wrapping page that should be rendered,
@@ -55,12 +56,21 @@ func (r *Renderer) BasePath() string {
 
 func (r *Renderer) BasePathHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path != r.BasePath() {
+			r.Render(req.Context(), w, r.notFoundPage, req.URL.Path)
+			return
+		}
+
 		err := r.Render(req.Context(), w, r.rootPage, nil)
 		if err != nil {
 			slog.Error("render base page", "error", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
+}
+
+func (r *Renderer) AddNotFound(notfoundPath string) {
+	r.notFoundPage = notfoundPath
 }
 
 // AddGlobal allows you to add a specific string replacement to the template renderer that will return
